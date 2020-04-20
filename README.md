@@ -66,3 +66,5 @@ A known case is the package [_cm-super_](https://ctan.org/pkg/cm-super). There a
 - Look for a more complete distribution. I would prefer this. Try [TeX Live 2020](https://www.tug.org/texlive/) for example.
 - Download the indivdual packages. Quick but less sustainable!?
 - Use different fonts. I heard that you can add `\usepackage{lmodern}` to the preamble of your document. See a [StackExchange](https://tex.stackexchange.com/questions/1390/latin-modern-vs-cm-super) discussion for more details on the pros and cons of _cm-super_ and _lmodern_.
+
+Other problems might be caused by bugs in my code, although I'm trying to prevent this. If you're pretty sure that the bug is in my code and not in yours, I'd be happy if you would create an issue so that I have a chance to fix it. Thanks!
