@@ -34,7 +34,7 @@ I start with a description for LaTeX/Git newbies. If that doesn't suit you, you 
 \end{document}
 ```
 
-Then, as usual, you compile the document (using `latexmk test` or whatever you prefer).
+Then, as usual, you compile the document (using `latexmk test` or whatever you prefer). Note that your LaTeX compiler has to be able to find the document classes. If you don't know better, simply copy them into the same directory as the file that you're compiling. If you want to use these classes in multiple documents, in several places, there are better ways to deal with it (which I perhaps will discuss somewhere in the future).
 
 Naturally, there's not much to see in an almost empty document. What is relevant here, is the first line, which sets _exerthss_ to be the document class. Used like this,  the class will rely on its default options. You change some aspects of the behaviour by providing _options_ to the class. As an example, if you replace the first line by `\documentclass[linenumbers]{exerthss}` the document will contain small line numbers, which may be helpful to discuss a draft of the document.
 
@@ -57,3 +57,12 @@ Both classes build upon the [KOMA-Script](https://www.komascript.de) classes _sc
 \end{document}
 ```
 
+# Known problems
+
+Some LaTeX distributions may be missing some required packages.
+
+A known case is the package [_cm-super_](https://ctan.org/pkg/cm-super). There are several ways to resolve this problem (and similar ones):
+
+- Look for a more complete distribution. I would prefer this. Try [TeX Live 2020](https://www.tug.org/texlive/) for example.
+- Download the indivdual packages. Quick but less sustainable!?
+- Use different fonts. I heard that you can add `\usepackage{lmodern}` to the preamble of your document. See a [StackExchange](https://tex.stackexchange.com/questions/1390/latin-modern-vs-cm-super) discussion for more details on the pros and cons of _cm-super_ and _lmodern_.
