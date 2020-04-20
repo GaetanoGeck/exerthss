@@ -57,7 +57,7 @@ Both classes build upon the [KOMA-Script](https://www.komascript.de) classes _sc
 \end{document}
 ```
 
-# Known problems
+## Known problems
 
 Some LaTeX distributions may be missing some required packages.
 
