@@ -11,7 +11,7 @@
 %---------------------------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{exercss}%
-	[2020/04/19 Simple class for exercises, building on exerthss]
+	[2020/04/26 Simple class for exercises, building on exerthss]
 
 
 
@@ -96,13 +96,17 @@
 %-----------------------------------------------------------
 % LAYOUT
 %-----------------------------------------------------------
-\newcommand{\exercss@layoutOptions}[1]{%
+%\newcommand{\exercss@layoutOptions}[1]{%
+\newcommand{\exerciseLayout}[1]{%
 	\exercssOptions{%
 		layout/.cd,%
 		#1,%
 	}%
 }
-\exercss@layoutOptions{
+%\newcommand{\exerciseLayout}[1]{%
+	%\exercss@layoutOptions{#1}%
+%}
+\exerciseLayout{
 	% LAYOUT ---------------------------
 	layout/.code 2 args={%
 		\csgdef{exerthss@layout#1}{#2}%
@@ -111,23 +115,55 @@
 		\csgdef{exerthss@layout#1@after}{#2}%
 	},
 	%
-	layout={sheet title}{\sffamily\bfseries},
-	layout={exercise number}{\arabic},
-	layout={subexercise number}{\alph},
-	layout={subsubexercise number}{\roman},
-	layout after={exercise number}{)},
-	layout after={subexercise number}{)},
-	layout after={subsubexercise number}{)},
-	layout={exercise title}{(},
-	layout after={exercise title}{)},
-	layout={exercise}{\sffamily\bfseries\boldmath},
-	layout={subexercise}{\sffamily\bfseries},
-	layout={subsubexercise}{\sffamily\bfseries},
-	layout={header}{\sffamily},
-	layout={footer}{\sffamily},
+	label/.style={
+		layout={label}{#1},
+	},
+	exercise number/.style={
+		layout={exercise number}{#1},
+	},
+	exercise number after/.style={
+		layout after={exercise number}{#1},
+	},
+	subexercise number/.style={
+		layout={subexercise number}{#1}
+	},
+	subexercise number after/.style={,
+		layout after={subexercise number}{#1}
+	},
+	subsubexercise number/.style={
+		layout={subsubexercise number}{#1},
+	},
+	subsubexercise number after/.style={
+		layout after={subsubexercise number}{#1},
+	},
+	exercise/.style={layout={exercise}{#1}},
+	exercise title/.style={layout={exercise title}{#1}},
+	exercise title after/.style={layout after={exercise title}{#1}},
+	subexercise/.style={layout={subexercise}{#1}},
+	subsubexercise/.style={layout={subsubexercise}{#1}},
+	header/.style={layout={header}{#1}},
+	footer/.style={layout={footer}{#1}},
+	% DEFAULTS ---------------------------------------------
+	label={\sffamily\bfseries\boldmath},
+	exercise={},
+	exercise title={[},
+	exercise title after={]},
+	subexercise={},
+	subsubexercise={},
+	header={},
+	footer={},
+	exercise number={\arabic},
+	exercise number after={},
+	subexercise number={\alph},
+	subexercise number after={)},
+	subsubexercise number={\roman},
+	subsubexercise number after={)},
 }
 
 \exercssOptions{
+	roman/.code={
+		\csgdef{exerthss@layoutlabel}{\rmfamily\bfseries\boldmath}%
+	},
 	.unknown/.code={
 		\exercss@addClassOption{\pgfkeyscurrentname}{\pgfkeyscurrentvalue}
 	},
@@ -177,8 +213,12 @@
 	\GetTranslation{ggex-group}~\exercss@group%
 }
 \newcommand{\exercss@insertExerciseName}{%
-	\GetTranslation{ggex-exercise}~%
-	\arabic{exercise}%
+	\exerthss@layout{label}{%
+		\exerthss@layout{exercise}{%
+			\GetTranslation{ggex-exercise}~%
+			\exerthss@layout{exercise number}{exercise}%
+		}%
+	}%
 }
 \newcommand{\exercss@insertAuthorsShort}{%
 	\exercss@authorsShort%
@@ -194,20 +234,26 @@
 \clearpairofpagestyles
 \ihead{%
 	\ifnum\value{page}=1\else%
-		\exerthss@layout{header}{%
-			\exercss@courseNameShort, 
-			\exercss@insertSheetName%
+		\exerthss@layout{label}{%
+			\exerthss@layout{header}{%
+				\exercss@courseNameShort, 
+				\exercss@insertSheetName%
+			}%
 		}%
 	\fi%
 }
 \chead{}
 \ohead{%
 	\ifnum\value{page}=1\else%
-		\exerthss@layout{header}{\exercss@insertAuthorsShort}%
+		\exerthss@layout{label}{%
+			\exerthss@layout{header}{\exercss@insertAuthorsShort}%
+		}%
 	\fi%
 }
 \cfoot{%
-	\exerthss@layout{footer}{\thepage~/~\pageref{LastPage}}%
+	\exerthss@layout{label}{%
+		\exerthss@layout{footer}{\thepage~/~\pageref{LastPage}}%
+	}%
 }
 
 
@@ -216,13 +262,12 @@
 % INNER SETTINGS (itemize, enumerate, ...)
 %=====================================================================
 \tcbset{
-	invisible/.style={
+	/exercss/plain/.style={
 		breakable,
 		colback=white,
 		colbacktitle=white,
 		coltitle=black,
 		sharp corners,
-		frame hidden,
 		enhanced,
 		top=0pt,
 		right=0pt,
@@ -232,14 +277,43 @@
 		enlarge top by=0pt,
 		enlarge bottom by=0pt,
 	},
+	/exercss/invisible/.style={
+		/exercss/plain,
+		frame hidden,
+	},
 	debug/.style={
 	},
 	exercise/.style={
-		invisible,
+		/exercss/invisible,
 		title=\exercss@insertExerciseTitle,
 		before skip=20pt,
 		after skip=20pt,
 	},
+	/exercss/sheet title default/.style={
+		/exercss/invisible,
+		colback=gray!10,
+		top=10pt,
+		bottom=10pt,
+		left=5pt,
+		right=5pt,
+		enlarge bottom by=1.5cm,
+	},
+	/exercss/sheet title default with borders/.style={
+		/exercss/sheet title default,
+		borderline north={1pt}{0pt}{gray},
+		borderline south={1pt}{0pt}{gray},
+	},
+	/exercss/sheet title/.style={
+		/exercss/sheet title default with borders,
+	},
+	/exercss/exercise/title/.store in=\exercss@currentExerciseTitle,
+	/exercss/exercise/box default/.style={
+		fonttitle=\sffamily\bfseries\boldmath,
+	},
+	/exercss/exercise/box/.style={
+		/exercss/exercise/box default,
+	},
+	/exercss/exercise/.search also=/tcb,
 }
 
 
@@ -252,17 +326,9 @@
 %-----------------------------------------------------------
 % EXCERCISE
 %-----------------------------------------------------------
+
 \newtcolorbox{sheetTitleBox}{
-	invisible,
-	colback=gray!10,
-	top=10pt,
-	bottom=10pt,
-	left=5pt,
-	right=5pt,
-	borderline north={1pt}{0pt}{gray},
-	borderline south={1pt}{0pt}{gray},
-	enlarge bottom by=1.5cm,
-	/exercss/sheet title/.try,
+	/exercss/sheet title,%
 }
 \newlength{\sheetTitleLeftWidth}
 \newlength{\sheetTitleRightWidth}
@@ -283,36 +349,37 @@
 }
 
 \newcommand{\exercss@sheetTitle}{%
-	\exerthss@layout{sheet title}{%
-		\begin{sheetTitleBox}%
-			\begin{minipage}[t]{\textwidth}%
-				\begin{minipage}[t]{\sheetTitleLeftWidth}%
-					\raggedright%
+	\begin{sheetTitleBox}%
+		\begin{minipage}[t]{\textwidth}%
+			\begin{minipage}[t]{\sheetTitleLeftWidth}%
+				\raggedright%
+				\exerthss@layout{label}{%
 					\exercss@sheetTitleLeft%
-				\end{minipage}%
-				\hfill
-				\begin{minipage}[t]{\sheetTitleRightWidth}%
-					\raggedleft%
-					\exercss@sheetTitleRight%
-				\end{minipage}%
+				}%
 			\end{minipage}%
-		\end{sheetTitleBox}%
-	}%
+			\hfill
+			\begin{minipage}[t]{\sheetTitleRightWidth}%
+				\raggedleft%
+				\exerthss@layout{label}{%
+					\exercss@sheetTitleRight%
+				}%
+			\end{minipage}%
+		\end{minipage}%
+	\end{sheetTitleBox}%
 }
 
 \newcommand{\exercss@insertExerciseTitle}{%
-	\exerthss@layout{exercise}{%
-		\exercss@insertExerciseName%
+	\exerthss@layout{label}{%
+		\exerthss@layout{exercise}{%
+			\exercss@insertExerciseName%
+		}%
 		\expandafter\ifstrempty\expandafter{\exercss@currentExerciseTitle}{}{%
-			~\exerthss@layout{exercise title}{%
+			~%
+			\exerthss@layout{exercise title}{%
 				\exercss@currentExerciseTitle%
 			}%
 		}%
 	}%
-}
-\tcbset{
-	/exercss/exercise/title/.store in=\exercss@currentExerciseTitle,
-	/exercss/exercise/.search also=/tcb,
 }
 \newtcolorbox{exerciseBox}[1][]{exercise,#1}
 
@@ -321,23 +388,29 @@
 	\gdef\exercss@currentExerciseTitle{}%
 	\stepcounter{exercise}%
 
-	\begin{exerciseBox}[/exercss/exercise/.cd,#1]%
+	\begin{exerciseBox}[/exercss/exercise/.cd,box/.try,#1]%
 		\BODY%
 	\end{exerciseBox}%
 	\noindent%
 }
 
 \newlist{subexercises}{enumerate}{1}
-\setlist[subexercises]{
-	label=\exerthss@layout{subexercise}{%
-		\exerthss@layout{subexercise number}{*}%
+\setlist[subexercises]{%
+	label=%
+	\exerthss@layout{label}{%
+		\exerthss@layout{subexercise}{%
+			\exerthss@layout{subexercise number}{*}%
+		}%
 	}%
 }
 
 \newlist{subsubexercises}{enumerate}{1}
-\setlist[subsubexercises]{
-	label=\exerthss@layout{subsubexercise}{%
+\setlist[subsubexercises]{%
+	label=%
+	\exerthss@layout{label}{%
+		\exerthss@layout{subsubexercise}{%
 		\exerthss@layout{subsubexercise number}{*}%
+		}%
 	}%
 }
 
