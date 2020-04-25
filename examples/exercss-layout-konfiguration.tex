@@ -1,21 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% FILE: exercss-beispiel.tex
+% FILE: exercss-layout-konfiguration.tex
 %
-% This file demonstrates the use of the 'exercss' document class to provide 
-% solutions for homework.
+% This file demonstrates the configuration of the sheet title and the exercises
+% in documents that use the 'exercss' document class.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[
-	%roman,% set labels in roman type.
-	%linenumbers,% enable line numbers
-	%hyperrefcolors=false, % disable link colors
-]{exercss}
+% Use a class that contains the customized layout and loads 'exercss'
+\documentclass{myclass}
 
 % German, automatically use German words like 'Aufgabe', ...
 \usepackage[ngerman]{babel}
 
-% Provide some meta-information for this homework.
-% If you specify properties as empty, like `group={}', they are hidden.
 \exerciseMeta{
 	course name=Lineare Algebra~I, % title
 	course name short=LinA~I, % headers (from page 2 on)
