@@ -1,6 +1,6 @@
 # LaTeX classes for exercises, reports and theses
 
-This repository provides document classes for LaTeX that target student reports, homework and theses. Although already usable, both classes are still in an early stage and will be enhanced soon. This is even more true for this documentation. Sorry, but currently my main goal is simply to provide an access point to students.
+This repository provides document classes for LaTeX that target student reports, homework and theses. Although already usable, both classes are still in an early stage and will be enhanced soon.
 
 **Language support.** The document class for homework (_exercss.cls_) currently supports only English and German labels out of the box but it's not very hard to add your own ones.
 
