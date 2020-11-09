@@ -1,0 +1,78 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FILE: exercss-alternative-num.tex
+%
+% This file is basically the same as 'exercss-beispiel'. The only difference is
+% that it demonstrates how the number format of exercises, subexercises and
+% subsubexercises can be changed via \exerciseLayout in Line 31ff.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[
+	%roman,% set labels in roman type.
+	%linenumbers,% enable line numbers
+	%hyperrefcolors=false, % disable link colors
+]{exercss}
+
+% German, automatically use German words like 'Aufgabe', ...
+\usepackage[ngerman]{babel}
+
+% Provide some meta-information for this homework.
+% If you specify properties as empty, like `group={}', they are hidden.
+\exerciseMeta{
+	course name=Lineare Algebra~I, % title
+	course name short=LinA~I, % headers (from page 2 on)
+	sheet number=3, % title
+	group=XY1, % title
+	%group={}, % uncomment this to hide the `group' property
+	author=Anna Apfel, % title
+	author=Bert Birne, % title
+	authors short={Apfel, Birne}, % headers (from page 2 on)
+}
+
+\exerciseLayout{
+	exercise number={\arabic},       % default: \arabic
+	exercise number after={},        % default: ''
+	subexercise number={\arabic},    % default: \alph
+	subexercise number after={.},    % default ')' 
+	subsubexercise number={\alph},   % default: \roman
+	subsubexercise number after={)}, % default: ')'
+}
+
+\begin{document}
+	Lösungsvorschläge zu Aufgaben können -- und sollen -- innerhalb der Umgebungen \texttt{exercise} formuliert werden. Natürlich ist es dennoch möglich, Inhalte außerhalb dieser Umgebungen zu verfassen, so wie diesen Text (vor der ersten \texttt{exercise}-Umgebung).
+
+	Für die Demonstration einiger Layout-Eigenschaften auf der nächsten Seite, geben wir hier eine Gleichung an, die wir später referenzieren.
+	\begin{equation}
+		\label{euler}
+		e^{i\pi} + 1 = 0
+	\end{equation}
+	Nun demonstrieren wir die Verwendung der \texttt{exercise}-Umgebung mitsamt ihrer Unterumgebungen \texttt{subexercises} und \texttt{subsubexercises}. Die erste Aufgabe demonstriert gleich alle drei Umgebungen. Ferner wird für die Aufgabe ein Titel, \emph{Linearität}, definiert.
+	\begin{exercise}[title=Linearität]
+		Da die gegebene Abbildung~$f$ linear ist, besitzt sie folgende Eigenschaften.
+		\begin{subexercises}
+		\item Sie ist homogen. Das heißt, es gilt $f(ax) = af(x)$ für jeden Skalar~$a$ und jeden Vektor~$x$.
+		\item Außerdem ist sie additiv. Das heißt, es gilt $f(x+y) = f(x) + f(y)$ für alle Vektoren~$x$ und~$y$.
+
+			Dazu lässt sich noch mehr sagen.
+			\begin{subsubexercises}
+			\item Einerseits gilt \dots
+			\item Andererseits gilt \dots
+			\end{subsubexercises}
+		\end{subexercises}
+	\end{exercise}
+	Die Umgebungen \texttt{subexercises} und \texttt{subsubexercises} sind spezielle Varianten von \texttt{enumerate}-Umgebungen. Entsprechend wird jede Teil- und Teil-Teil-Aufgabe mit \verb+\item+ eingeleitet.
+	\begin{exercise}
+		Dieser Lösungsvorschlag besitzt keinen Titel (und auch sonst keinen Inhalt).
+	\end{exercise}
+	\begin{exercise}[title={$\log(e^x) = x$}]
+		Auch Mathe-Umgebungen können Teil des Titels sein.
+	\end{exercise}
+	Nach den Aufgaben nun noch eine kurze Demonstration einiger Stilaspekte:
+	\begin{itemize}
+		\item \textbf{Referenzen:} Meinen persönlichen Präferenzen folgend werden Referenzen nicht durch Rechtecke eingerahmt, sondern farblich hervorgehoben.
+			\begin{itemize}
+				\item URL: \url{dblp.org}
+				\item Labelreferenz: Gleichung~\eqref{euler} ist schön.
+			\end{itemize}
+		\item Weitere Aspekte folgen \dots
+	\end{itemize}
+\end{document}
